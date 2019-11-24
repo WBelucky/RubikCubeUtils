@@ -1,5 +1,5 @@
 import { CubeState } from "./cube_state";
-import { COCPtoOldPochManuever, EPEOtoM2Manuever } from "./mapping";
+import { COCPtoOldPochManuever, EPEOtoM2Manuever, EPEO2StickerName } from "./mapping";
 import { getInverseManuever } from "./utils";
 import { Vector } from "./vector";
 
@@ -25,8 +25,8 @@ const M2Method = (cube: CubeState): {maneuver: string, parity: boolean}  => {
     loop: while (true) {
         const fin = (parityCount % 2 === 1 ? cb.ep.equals(OddEP) : cb.ep.equals(EvenEP)) && cb.eo.equals(EO);
         if (fin) break;
-
-        for (let epi = 0; epi < 12; epi++) {
+        const arr = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11];
+        for (const epi of arr) {
             const ep = cb.getEOEP(0, epi).ep;
             const eo = cb.getEOEP(0, epi).eo;
             if (eo !== 0 && epi !== 10) {
@@ -46,15 +46,22 @@ const M2Method = (cube: CubeState): {maneuver: string, parity: boolean}  => {
         }
         let cnt = 0;
         while(true) {
-            let maneuver = EPEOtoM2Manuever[buf.ep][buf.eo];
-            if (parityCount % 2 === 1 ) {
-                if (buf.ep === 6 ) {
-                    maneuver = EPEOtoM2Manuever[8][buf.eo];
-                } else if (buf.ep === 8) {
-                    maneuver = EPEOtoM2Manuever[6][buf.eo];
+            const [ep, eo] = ((buf: {eo: number, ep: number}, parityCount: number): [number, number] => {
+                if (parityCount %2 === 1) {
+                    if (buf.ep === 6 ) {
+                        return [8, buf.eo];
+                    } else if (buf.ep === 8) {
+                        return [6, buf.eo];
+                    }
                 }
-            }
-            retManuevers +=  maneuver;
+                return [buf.ep, buf.eo];
+            })(buf, parityCount)
+
+            const maneuver = EPEOtoM2Manuever[ep][eo];
+            const sticker = EPEO2StickerName[ep][eo];
+            console.log(sticker, maneuver);
+
+            retManuevers += maneuver;
             cb = cb.applyMoves(maneuver);
             buf = cb.getEOEP(0, 10);
             parityCount++;
@@ -66,6 +73,7 @@ const M2Method = (cube: CubeState): {maneuver: string, parity: boolean}  => {
             }
             cnt ++;
         }
+        console.log('ループ終了');
         if (count >= 100) {
             console.log(retManuevers);
             throw new Error('too many operations');
