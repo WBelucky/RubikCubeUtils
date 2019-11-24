@@ -1,30 +1,25 @@
 import { Vector } from "./vector";
+import { getMoveArray } from "./utils";
 
 export class CubeState {
-    public static solved = new CubeState(
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 2, 3, 4, 5, 6, 7],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    );
-    public static getMoveArray(manuerver: string): RegExpMatchArray | null {
-        const retMoveArray = manuerver.match(/[FBUDRLXYZMES](\'|2)?/g);
-        if (retMoveArray === null) {
-            return null;
-        }
-        return retMoveArray;
-    }
     public co: Vector;
     public cp: Vector;
     public eo: Vector;
     public ep: Vector;
     public centerPermutation: Vector = new Vector([0, 1, 2, 3, 4, 5]);
-    public normarized: CubeState = this;
 
+    constructor(co?: undefined);
     constructor(cubeState: CubeState);
     constructor(co: number[], cp: number[], eo: number[], ep: number[], centerP?: number[]);
     constructor(co: Vector, cp: Vector, eo: Vector, ep: Vector, centerP?: Vector);
     constructor(co: unknown, cp?: unknown, eo?: unknown, ep?: unknown, centerP?: unknown) {
+        if (co === undefined) {
+            this.co = new Vector([0, 0, 0, 0, 0, 0, 0, 0]);
+            this.cp = new Vector([0, 1, 2, 3, 4, 5, 6, 7]);
+            this.eo = new Vector([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            this.ep = new Vector([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+            return;
+        }
         if (co instanceof CubeState) {
             this.co = new Vector(co.co);
             this.cp = new Vector(co.cp);
@@ -82,7 +77,7 @@ export class CubeState {
         throw new Error("Inavlid type of argument: string or CubeState");
     }
     public applyMoves(moveStr: string): CubeState {
-        const moveArray = CubeState.getMoveArray(moveStr);
+        const moveArray = getMoveArray(moveStr);
         let retState = new CubeState(this);
         if (moveArray == null) {
             return this;
@@ -236,9 +231,9 @@ const addMove = (...moveNames: string[]): void => {
     }
 };
 addMove(...fundamentalMoveNames);
-moves.M = CubeState.solved.applyMoves("RL\'X\'");
-moves.E = CubeState.solved.applyMoves("UD\'Y\'");
-moves.S = CubeState.solved.applyMoves("FB\'Z\'");
+moves.M = new CubeState().applyMoves("RL\'X\'");
+moves.E = new CubeState().applyMoves("UD\'Y\'");
+moves.S = new CubeState().applyMoves("FB\'Z\'");
 fundamentalMoveNames.push("M", "E", "S");
 addMove("M", "E", "S");
 
