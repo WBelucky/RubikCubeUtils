@@ -7,18 +7,25 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="text" id="cubeMotionInputWithSentence">
-    <button id="applyScramble">apply!</button>
-    <button id="toggleKeyboard">keyboard: off</button> 
-    <button id="R">R</button>
-    <button id="L">L</button>
-    <button id="U">U</button>
-    <button id="D">D</button>
-    <button id="F">F</button>
-    <button id="B">B</button>
-    <button id="resetBtn">reset</button>
-    <button id="inverseBtn">inverse</button>
-    <button id="solveBtn">solve(M2 and OldPochmann)</button>
+    <div>
+        <p>ここに回転記号を入力してください <a href="https://cubevoyage.net/how-to-solve/intermediate/notation/">回転記号とは(Cube Voyage)</a></p>
+        <div>
+            <input type="text" id="cubeMotionInputWithSentence" value="R2 L2 U2 D2 F2 B2">
+            <button id="applyScramble">適用</button>
+        </div>
+    </div>
+    <p>
+        <button id="toggleKeyboard"></button> 
+        <button id="R">R</button>
+        <button id="L">L</button>
+        <button id="U">U</button>
+        <button id="D">D</button>
+        <button id="F">F</button>
+        <button id="B">B</button>
+        <button id="resetBtn">リセット</button>
+        <button id="inverseBtn">逆手順生成</button>
+        <button id="solveBtn">解く(M2 and OldPochmann)</button>
+    </p>
     <div id="solveOutput"></div>
     <script src="./ts/main.ts"></script>
 </body>

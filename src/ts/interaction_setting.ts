@@ -40,7 +40,7 @@ export const interactionSetting = (cubeCanvas: CubeCanvas, cube: CubeState, keyb
     setFunctionToTheBtn("solveBtn", async () => {
         const maneuver = solveM2AndOldPochmann(cube);
         output.innerHTML = maneuver;
-        cube = await cubeCanvas.moveSequeitially(cube, maneuver, 50);
+        cube = await cubeCanvas.moveSequeitially(cube, maneuver, 1);
     });
 
     setFunctionToTheBtn("inverseBtn", () => {

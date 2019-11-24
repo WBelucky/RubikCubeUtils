@@ -23,13 +23,9 @@ const M2Method = (cube: CubeState): {maneuver: string, parity: boolean}  => {
     const EO = new Vector([0,0,0,0,0 ,0,0,0,0,0 ,0,0]);
 
     loop: while (true) {
-        console.log(cb.ep.equals(OddEP));
-        console.log(cb.ep.equals(EvenEP));
-        console.log(cb.eo.equals(EO));
-        console.log(parityCount % 2 == 1);
         const fin = (parityCount % 2 === 1 ? cb.ep.equals(OddEP) : cb.ep.equals(EvenEP)) && cb.eo.equals(EO);
-        console.log(fin)
         if (fin) break;
+
         for (let epi = 0; epi < 12; epi++) {
             const ep = cb.getEOEP(0, epi).ep;
             const eo = cb.getEOEP(0, epi).eo;
@@ -59,8 +55,6 @@ const M2Method = (cube: CubeState): {maneuver: string, parity: boolean}  => {
                 }
             }
             retManuevers +=  maneuver;
-            console.log(buf);
-            console.log(maneuver);
             cb = cb.applyMoves(maneuver);
             buf = cb.getEOEP(0, 10);
             parityCount++;
@@ -107,8 +101,6 @@ export const OldPochmann = (cube: CubeState): string => {
             const setup = COCPtoOldPochManuever[buf.cp][buf.co];
             const maneuver = setup + altYPerm + getInverseManuever(setup);
             retManuevers += maneuver;
-            console.log(buf);
-            console.log(maneuver);
             cb = cb.applyMoves(maneuver);
             buf = cb.getCOCP(0, 0);
             parityCount++;

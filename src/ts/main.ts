@@ -9,7 +9,7 @@ import { interactionSetting } from "./interaction_setting";
 
 const main = () => {
 
-    const app = new PIXI.Application({ width: 640, height: 480 });
+    const app = new PIXI.Application({ width: 640, height: 480, backgroundColor: 0xFFFFFF });
 
     document.body.appendChild(app.view);
 
