@@ -1,4 +1,11 @@
-import { CubeState } from "./cube_state";
+
+export const sleep = (time: number) => {
+    return new Promise((res) => {
+        setTimeout(() => {
+           res(); 
+        }, time);
+    })
+}
 
 export const getInverseManuever = (manu: string): string => {
     let retManuever = "";

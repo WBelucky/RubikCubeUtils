@@ -41,17 +41,17 @@ export class CubeCanvas extends PIXI.Graphics {
         }
     }
 
-    public async moveSequeitially(cube: CubeState, maneuver: string, interval: number): Promise<void> {
+    public async moveSequeitially(cube: CubeState, maneuver: string, interval: number): Promise<CubeState> {
         const motions = getMoveArray(maneuver);
         if (motions == null) {
-            return;
+            return cube;
         }
-        let i = 0;
         for (const motion of motions) {
             cube = cube.applyMoves(motion);
             this.draw(cube);
-            await sleep(300);
+            await sleep(interval);
         }
+        return cube;
     }
 };
 

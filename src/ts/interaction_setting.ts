@@ -1,7 +1,7 @@
 import { CubeCanvas } from "./cube_canvas";
 import { CubeState, faces } from "./cube_state";
-import { solveM2, OldPochmann } from "./solver";
 import { getInverseManuever } from "./utils";
+import { solveM2AndOldPochmann } from "./solver";
 
 const setFunctionToTheBtn = (btnName: string, func: () => void) => {
     const btnHtmlElement = document.getElementById(btnName) as HTMLElement;
@@ -13,8 +13,9 @@ const setFunctionToTheBtn = (btnName: string, func: () => void) => {
 
 export const interactionSetting = (cubeCanvas: CubeCanvas, cube: CubeState, keyboardIsOn: boolean) => {
     const form = document.getElementById("cubeMotionInputWithSentence") as HTMLInputElement;
-    setFunctionToTheBtn("applyScramble", () => {
-        cubeCanvas.moveSequeitially(cube, form.value, 500);
+    setFunctionToTheBtn("applyScramble", async () => {
+        cube = await cubeCanvas.moveSequeitially(cube, form.value, 1);
+        console.log(cube);
     });
 
     const toggleKeyboardBtnName = "toggleKeyboard";
@@ -36,10 +37,10 @@ export const interactionSetting = (cubeCanvas: CubeCanvas, cube: CubeState, keyb
         throw new Error("cannotfind the name outputSolve");
     }
 
-    setFunctionToTheBtn("solveBtn", () => {
-        const maneuver = solveM2(cube) + OldPochmann(cube);
-        cubeCanvas.moveSequeitially(cube, maneuver, 200);
+    setFunctionToTheBtn("solveBtn", async () => {
+        const maneuver = solveM2AndOldPochmann(cube);
         output.innerHTML = maneuver;
+        cube = await cubeCanvas.moveSequeitially(cube, maneuver, 50);
     });
 
     setFunctionToTheBtn("inverseBtn", () => {
@@ -50,9 +51,10 @@ export const interactionSetting = (cubeCanvas: CubeCanvas, cube: CubeState, keyb
     const btn: {[key: string]: HTMLElement} = {};
     for (const face of faces) {
         btn[face] = document.getElementById(face) as HTMLElement;
-        if (btn[face] != null) {
+        if (btn[face] !== null) {
             btn[face].addEventListener("click", () => {
                 cube = cube.applyMoves(face);
+                cubeCanvas.draw(cube);
             });
         }
     }
